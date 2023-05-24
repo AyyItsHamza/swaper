@@ -45,8 +45,8 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 fun LoginScene(viewModel: LoginViewModel) {
     val context = LocalContext.current
 
-    val emailState = remember { mutableStateOf(TextFieldValue("victorbretones@gmail.com")) }
-    val passwordState = remember { mutableStateOf(TextFieldValue("12345678")) }
+    val emailState = remember { mutableStateOf(TextFieldValue("xdd@gmail.com")) }
+    val passwordState = remember { mutableStateOf(TextFieldValue("123456789")) }
 
     fun validateInputs(callback: (email: String, password: String) -> Unit) {
         val email = emailState.value.text

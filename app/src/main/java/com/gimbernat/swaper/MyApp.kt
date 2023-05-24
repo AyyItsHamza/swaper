@@ -13,9 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import com.gimbernat.swaper.datasource.ProductosDataSource
+import com.albertleal.gibernat.myapplication.datasources.ProductosDataSource
 import com.gimbernat.swaper.datasource.SessionDataSource
 import com.gimbernat.swaper.ui.scenes.login.LoginSceneFactory
+import com.gimbernat.swaper.ui.scenes.main.MainSceneFactory
 import com.gimbernat.swaper.ui.scenes.welcome.WelcomeSceneFactory
 import com.gimbernat.swaper.ui.theme.AppRoutes
 import com.gimbernat.swaper.ui.theme.MyApplicationTheme
@@ -30,14 +31,14 @@ import com.google.firebase.database.FirebaseDatabase
 fun MyApp() {
     val navController = rememberAnimatedNavController()
     val sessionDataSource = SessionDataSource()
-    val capsulesDataSource = ProductosDataSource(database = FirebaseDatabase.getInstance())
+    val productosDataSource = ProductosDataSource(database = FirebaseDatabase.getInstance())
 
     //WelcomeScene
     val welcomeSceneFactory = WelcomeSceneFactory(navController)
     //LoginScene
     val loginSceneFactory = LoginSceneFactory(navController, sessionDataSource)
     //MainScene
-    //val mainSceneFactory = MainSceneFactory(navController, sessionDataSource, capsulesDataSource)
+    val mainSceneFactory = MainSceneFactory(navController, sessionDataSource, productosDataSource)
     //Capsule Detail
     //val capsuleDetailSceneFactory = CapsuleDetailSceneFactory(navController, capsulesDataSource)
 
@@ -73,11 +74,11 @@ fun MyApp() {
                 welcomeSceneFactory.create(null)
             }
 
-            /*composable(
+            composable(
                 AppRoutes.MAIN.value
             ) {
                 mainSceneFactory.create(null)
-            }*/
+            }
 
             composable(
                 AppRoutes.LOGIN.value
