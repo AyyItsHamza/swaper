@@ -16,14 +16,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.gimbernat.swaper.models.Producto
-
 @Composable
-fun CapsuleItem(
+fun ProductItem(
     producto: Producto,
     onItemClick: (Producto) -> Unit
 ) {
-
-    Log.d("Capsule Image URL", producto.imageUrl)
+    Log.d("Product Image URL", producto.imageUrl)
 
     Row(
         modifier = Modifier
@@ -31,11 +29,10 @@ fun CapsuleItem(
             .fillMaxWidth()
             .padding(vertical = 8.dp, horizontal = 16.dp)
     ) {
-
         AsyncImage(
             model = producto.imageUrl,
             modifier = Modifier.size(64.dp).fillMaxHeight(),
-            contentDescription = "Image of a capsule test "+producto.name,
+            contentDescription = "Image of a product: ${producto.name}"
         )
 
         Column(
@@ -53,32 +50,6 @@ fun CapsuleItem(
                 text = producto.description,
                 style = MaterialTheme.typography.bodyMedium,
                 maxLines = 3,
-                overflow = TextOverflow.Ellipsis
-            )
-
-            Text(
-                text = "$${producto.price}",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.primary,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-            Text(
-                text = "Origin: " + producto.origin,
-                style = MaterialTheme.typography.bodySmall,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-            Text(
-                text = "Favour: " + producto.flavorProfile,
-                style = MaterialTheme.typography.bodySmall,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-            Text(
-                text = "Intensity: " + producto.intensity,
-                style = MaterialTheme.typography.bodySmall,
-                maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
         }

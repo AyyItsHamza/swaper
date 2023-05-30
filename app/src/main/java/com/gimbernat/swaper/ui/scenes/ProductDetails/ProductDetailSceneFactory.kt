@@ -1,21 +1,19 @@
-package com.gimbernat.swaper.ui.scenes.main
+package com.gimbernat.swaper.ui.scenes.ProductDetails
 
-import MainScene
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import com.albertleal.gibernat.myapplication.datasources.ProductosDataSource
-import com.gimbernat.swaper.datasource.SessionDataSource
 import com.gimbernat.swaper.helpers.ComposableFactory
 
-class MainSceneFactory (
+class ProductDetailSceneFactory (
     private val navController: NavController,
-    private val sessionDataSource: SessionDataSource,
     private val productosDataSource: ProductosDataSource
 ) :
     ComposableFactory<Any> {
     @Composable
     override fun create(id: String?): Any {
-        val viewModel = MainSceneViewModel(navController, sessionDataSource, productosDataSource)
-        return MainScene(viewModel)
+        val producto = id?.let { productosDataSource.get(it) }
+        val viewModel = ProductDetailViewModel(navController = navController, product = producto)
+        return ProductDetailScene(viewModel)
     }
 }

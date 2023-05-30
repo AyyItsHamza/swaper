@@ -12,11 +12,11 @@ import com.gimbernat.swaper.models.Producto
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CapsuleAppBar(
+fun ProductoAppBar(
     proudcto: Producto,
     onItemClick: () -> Unit){
     TopAppBar(
-        title = { Text(text = proudcto.name ?: "") },
+        title = { Text(text = proudcto.id ?: "") },
         navigationIcon = {
             BackButton {
                 onItemClick()

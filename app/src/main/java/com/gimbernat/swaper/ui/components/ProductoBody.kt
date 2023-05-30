@@ -11,73 +11,42 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.gimbernat.swaper.models.Producto
-
 @Composable
-fun CapsuleBody(producto: Producto) {
-    Column(modifier = Modifier
-        .padding(horizontal = 16.dp)
-        .padding(top = 8.dp)
-    ){
-        Text(
-            text = "Flavor Profile",
-            style = MaterialTheme.typography.subtitle1,
-            fontWeight = FontWeight.Bold)
-
-        Text(
-            text = producto?.flavorProfile ?: "",
-            style = MaterialTheme.typography.body1
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = "Origin",
-            style = MaterialTheme.typography.subtitle1,
-            fontWeight = FontWeight.Bold
-        )
-        Text(
-            text = producto?.origin ?: "",
-            style = MaterialTheme.typography.body1
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = "Intensity",
-            style = MaterialTheme.typography.subtitle1,
-            fontWeight = FontWeight.Bold
-        )
-        Text(
-            text = producto?.intensity.toString() ?: "",
-            style = MaterialTheme.typography.body1
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = "Price",
-            style = MaterialTheme.typography.subtitle1,
-            fontWeight = FontWeight.Bold
-        )
-        Text(
-            text = "$${producto?.price ?: ""}",
-            style = MaterialTheme.typography.body1
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = "Categories",
-            style = MaterialTheme.typography.subtitle1,
-            fontWeight = FontWeight.Bold
-        )
-        Text(
-            text = producto?.categories?.joinToString(", ") ?: "",
-            style = MaterialTheme.typography.body1
-        )
-        Spacer(modifier = Modifier.height(16.dp))
+fun ProductBody(producto: Producto) {
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .padding(top = 8.dp)
+    ) {
         Text(
             text = "Description",
             style = MaterialTheme.typography.subtitle1,
             fontWeight = FontWeight.Bold
         )
         Text(
-            text = producto?.description ?: "",
+            text = producto.description,
             textAlign = TextAlign.Justify,
             style = MaterialTheme.typography.body2
         )
-        Spacer(modifier = Modifier.height(150.dp))
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = "ID",
+            style = MaterialTheme.typography.subtitle1,
+            fontWeight = FontWeight.Bold
+        )
+        Text(
+            text = producto.id ?: "",
+            style = MaterialTheme.typography.body1
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = "Image URL",
+            style = MaterialTheme.typography.subtitle1,
+            fontWeight = FontWeight.Bold
+        )
+        Text(
+            text = producto.imageUrl,
+            style = MaterialTheme.typography.body1
+        )
     }
 }

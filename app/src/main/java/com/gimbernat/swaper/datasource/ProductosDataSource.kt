@@ -21,9 +21,19 @@ class ProductosDataSource(private val database: FirebaseDatabase) : IProductosDa
                 val fetchedProductos = mutableListOf<Producto>()
 
                 for (productoSnapshot in snapshot.children) {
+
                     val producto = productoSnapshot.getValue(Producto::class.java)
                     if (producto != null) {
                         producto.id = productoSnapshot.key
+                        fetchedProductos.add(producto)
+                    }
+                    val productoId = productoSnapshot.key as String
+                    val nombre = productoSnapshot.child("nombre").getValue(String::class.java)
+                    val descripcion = productoSnapshot.child("descripcion").getValue(String::class.java)
+                    val imageUrl = productoSnapshot.child("imagenes").getValue(String::class.java)
+
+                    if (nombre != null && descripcion != null && imageUrl != null) {
+                        val producto = Producto(name = nombre, description = descripcion, imageUrl = imageUrl, id = productoId)
                         fetchedProductos.add(producto)
                     }
                 }
@@ -44,6 +54,7 @@ class ProductosDataSource(private val database: FirebaseDatabase) : IProductosDa
 
             val ref = database.getReference("productos")
             ref.addListenerForSingleValueEvent(object : ValueEventListener {
+
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val fetchedProductos = mutableListOf<Producto>()
 
@@ -67,7 +78,6 @@ class ProductosDataSource(private val database: FirebaseDatabase) : IProductosDa
             })
         }
     }
-
     override fun get(id: String): Producto? {
         return productos.find { it.id == id }
     }

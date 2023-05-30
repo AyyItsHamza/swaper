@@ -15,6 +15,7 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.albertleal.gibernat.myapplication.datasources.ProductosDataSource
 import com.gimbernat.swaper.datasource.SessionDataSource
+import com.gimbernat.swaper.ui.scenes.ProductDetails.ProductDetailSceneFactory
 import com.gimbernat.swaper.ui.scenes.login.LoginSceneFactory
 import com.gimbernat.swaper.ui.scenes.main.MainSceneFactory
 import com.gimbernat.swaper.ui.scenes.welcome.WelcomeSceneFactory
@@ -40,7 +41,7 @@ fun MyApp() {
     //MainScene
     val mainSceneFactory = MainSceneFactory(navController, sessionDataSource, productosDataSource)
     //Capsule Detail
-    //val capsuleDetailSceneFactory = CapsuleDetailSceneFactory(navController, capsulesDataSource)
+    val productoFactory = ProductDetailSceneFactory(navController, productosDataSource)
 
     // Determine the start destination based on whether the user is logged in or not
     val startDestination = if (sessionDataSource.isLoggedIn() ) AppRoutes.MAIN.value else AppRoutes.WELCOME.value
@@ -104,7 +105,7 @@ fun MyApp() {
             ) {
                 //Forcing not be null, this is a bad practice
                 val id: String = it.arguments?.getString("id")!!
-                //capsuleDetailSceneFactory.create(id = id)
+                productoFactory.create(id = id)
             }
         }
     }

@@ -9,21 +9,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.gimbernat.swaper.models.Producto
-
 @Composable
-fun CapsuleHeader(producto: Producto) {
-    if(!producto.heroImageUrl.isNullOrBlank()){
+fun ProductHeader(producto: Producto) {
+    if (!producto.imageUrl.isNullOrBlank()) {
         AsyncImage(
-            model = producto.heroImageUrl,
+            model = producto.imageUrl,
             modifier = Modifier.fillMaxWidth(),
-            contentDescription = "Image of a capsule test "+producto.name,
+            contentDescription = "Image of a product: ${producto.name}"
         )
-    }else{
+    } else {
         AsyncImage(
             model = producto.imageUrl,
             modifier = Modifier.fillMaxWidth().height(120.dp),
-            contentDescription = "Image of a capsule test "+producto.name,
+            contentDescription = "Image of a product: ${producto.name}"
         )
     }
-
 }
