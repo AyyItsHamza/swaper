@@ -47,6 +47,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.constraintlayout.compose.State
 import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
+import com.gimbernat.swaper.ui.components.ProductBody
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -70,7 +71,6 @@ fun MainScene(viewModel: MainSceneViewModel) {
                         Icon(Icons.Filled.ExitToApp, contentDescription = null)
                     }
                 }
-
             )
         }
     ) {innerPadding ->

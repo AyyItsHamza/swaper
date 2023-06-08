@@ -31,7 +31,7 @@ fun ProductDetailScene(viewModel: ProductDetailViewModel) {
                 )
             }
         ) {
-
+            ProductBody(producto = producto )
         }
     }
 }

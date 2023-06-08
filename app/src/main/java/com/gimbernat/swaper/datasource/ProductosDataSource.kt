@@ -19,14 +19,8 @@ class ProductosDataSource(private val database: FirebaseDatabase) : IProductosDa
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val fetchedProductos = mutableListOf<Producto>()
-
                 for (productoSnapshot in snapshot.children) {
 
-                    val producto = productoSnapshot.getValue(Producto::class.java)
-                    if (producto != null) {
-                        producto.id = productoSnapshot.key
-                        fetchedProductos.add(producto)
-                    }
                     val productoId = productoSnapshot.key as String
                     val nombre = productoSnapshot.child("nombre").getValue(String::class.java)
                     val descripcion = productoSnapshot.child("descripcion").getValue(String::class.java)
@@ -71,7 +65,6 @@ class ProductosDataSource(private val database: FirebaseDatabase) : IProductosDa
 
                     continuation.resume(fetchedProductos)
                 }
-
                 override fun onCancelled(error: DatabaseError) {
                     continuation.resumeWithException(error.toException())
                 }

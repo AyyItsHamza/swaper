@@ -46,12 +46,12 @@ fun ProductItem(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
-            Text(
+            /*Text(
                 text = producto.description,
                 style = MaterialTheme.typography.bodyMedium,
                 maxLines = 3,
                 overflow = TextOverflow.Ellipsis
-            )
+            )*/
         }
     }
 }
