@@ -68,6 +68,8 @@ fun WelcomeScene(viewModel: WelcomeSceneViewModel) {
     }
 }
 
+
+//hola
 @OptIn(ExperimentalAnimationApi::class)
 @Preview(showBackground = true)
 @Composable
