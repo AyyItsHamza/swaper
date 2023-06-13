@@ -13,14 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import com.gimbernat.swaper.R
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.*
 import androidx.compose.ui.Modifier
@@ -39,6 +32,8 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import java.time.format.TextStyle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.*
 import androidx.compose.runtime.remember
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ImageBitmap
@@ -72,8 +67,18 @@ fun MainScene(viewModel: MainSceneViewModel) {
                     }
                 }
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    // Handle add product button click
+                    viewModel.addProduct()
+                }
+            ) {
+                Icon(Icons.Filled.Add, contentDescription = "Add Product")
+            }
         }
-    ) {innerPadding ->
+    ) { innerPadding ->
         val products by viewModel.productos.observeAsState(emptyList())
 
         LazyColumn(Modifier.padding(innerPadding)) {

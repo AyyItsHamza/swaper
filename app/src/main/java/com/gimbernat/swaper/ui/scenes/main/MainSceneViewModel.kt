@@ -1,6 +1,12 @@
 package com.gimbernat.swaper.ui.scenes.main
 
 import android.util.Log
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.Button
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,13 +23,13 @@ class MainSceneViewModel(
     private val sessionDataSource: SessionDataSource,
     private val productosDataSource: ProductosDataSource
 ) : ViewModel() {
-    private val _capsules = MutableLiveData<List<Producto>>()
-    val productos: LiveData<List<Producto>> = _capsules
+    private val _productos = MutableLiveData<List<Producto>>()
+    val productos: LiveData<List<Producto>> = _productos
 
     fun fetch(){
         viewModelScope.launch {
             val capsulesList = productosDataSource.fetch()
-            _capsules.value = capsulesList
+            _productos.value = capsulesList
             subscribe()
         }
     }
@@ -31,7 +37,7 @@ class MainSceneViewModel(
     fun subscribe(){
         viewModelScope.launch {
             productosDataSource.subscribe {
-                _capsules.value = it
+                _productos.value = it
             }
         }
     }
@@ -51,5 +57,9 @@ class MainSceneViewModel(
         viewModelScope.launch {
             navController.navigate(AppRoutes.CAPSULE_DETAIL.value+"/"+producto.id)
         }
+    }
+
+    fun addProduct() {
+
     }
 }
