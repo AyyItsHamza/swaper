@@ -6,6 +6,7 @@ import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -59,7 +60,16 @@ class MainSceneViewModel(
         }
     }
 
-    fun addProduct() {
+    fun addProduct(productName: String, price: String) {
+        viewModelScope.launch {
+            // Create a new product object with the given name and price
+            val newProduct = Producto(productName, price)
 
+            // Add the new product to the data source
+            productosDataSource.addProduct(newProduct)
+
+            // Fetch the updated list of products
+            fetch()
+        }
     }
 }

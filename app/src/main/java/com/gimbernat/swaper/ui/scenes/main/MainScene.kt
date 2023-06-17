@@ -1,14 +1,6 @@
 import android.annotation.SuppressLint
-import android.util.Log
+import android.widget.Toast
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -18,42 +10,35 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import com.gimbernat.swaper.datasource.SessionDataSource
-import com.gimbernat.swaper.models.Producto
 import com.gimbernat.swaper.ui.components.ProductItem
 import com.gimbernat.swaper.ui.scenes.login.LoginSceneFactory
 import com.gimbernat.swaper.ui.scenes.main.MainSceneViewModel
 import com.gimbernat.swaper.ui.theme.MyApplicationTheme
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import java.time.format.TextStyle
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.remember
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.res.painterResource
-import androidx.constraintlayout.compose.State
-import coil.compose.ImagePainter
-import coil.compose.rememberImagePainter
-import com.gimbernat.swaper.ui.components.ProductBody
+import androidx.compose.ui.text.input.KeyboardType
+import com.gimbernat.swaper.models.Producto
+
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScene(viewModel: MainSceneViewModel) {
-    //Loads
+    // Loads
     viewModel.fetch()
 
-    //The Scaffold composable is used to create the top-level structure of the application.
-    //It includes a TopAppBar with the application name as the title.
-    //It includes also a button to sign out
+    // The Scaffold composable is used to create the top-level structure of the application.
+    // It includes a TopAppBar with the application name as the title.
+    // It also includes a button to sign out
+    var showDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -71,14 +56,22 @@ fun MainScene(viewModel: MainSceneViewModel) {
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    // Handle add product button click
-                    viewModel.addProduct()
+                     showDialog = true
                 }
             ) {
                 Icon(Icons.Filled.Add, contentDescription = "Add Product")
             }
         }
     ) { innerPadding ->
+        if (showDialog) {
+            AddProductFormDialog(
+                onDismiss = { showDialog = false },
+                onConfirm = {
+                    showDialog = false
+                }
+            )
+        }
+
         val products by viewModel.productos.observeAsState(emptyList())
 
         LazyColumn(Modifier.padding(innerPadding)) {
@@ -89,6 +82,49 @@ fun MainScene(viewModel: MainSceneViewModel) {
             }
         }
     }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+fun AddProductFormDialog(
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit
+) {
+    var name by remember { mutableStateOf("") }
+    var description by remember { mutableStateOf("") }
+    var imageUrl by remember { mutableStateOf("") }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(text = "Añadir Producto") },
+        text = {
+            Column {
+                TextField(
+                    value = name,
+                    onValueChange = { name = it },
+                    label = { Text(text = "Nombre Producto") }
+                )
+                TextField(
+                    value = description,
+                    onValueChange = { description = it },
+                    label = { Text(text = "Descripcion Producto") }
+                )
+            }
+        },
+        dismissButton = {
+            Button(onClick = onDismiss) {
+                Text(text = "Cancelar")
+            }
+        },
+        confirmButton = {
+            Button(onClick = {
+                val product = Producto(name = name, description = description, imageUrl = imageUrl)
+                onConfirm()
+            }) {
+                Text(text ="Confirmar")
+            }
+        }
+    )
 }
 
 @OptIn(ExperimentalAnimationApi::class)
