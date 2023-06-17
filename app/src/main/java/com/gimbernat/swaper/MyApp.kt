@@ -88,7 +88,7 @@ fun MyApp() {
             }
 
             composable(
-                route = AppRoutes.CAPSULE_DETAIL.value+"/{id}",
+                route = AppRoutes.PRODUCT_DETAIL.value+"/{id}",
                 arguments = listOf(navArgument("id") { type = NavType.StringType }),
                 enterTransition = {
                     slideInVertically(

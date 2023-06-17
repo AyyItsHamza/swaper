@@ -27,7 +27,7 @@ class ProductosDataSource(private val database: FirebaseDatabase) : IProductosDa
                     val imageUrl = productoSnapshot.child("imagenes").getValue(String::class.java)
 
                     if (nombre != null && descripcion != null && imageUrl != null) {
-                        val producto = Producto(name = nombre, description = descripcion, imageUrl = imageUrl, id = productoId)
+                        val producto = Producto(nombre = nombre, descripcion = descripcion, imagenes = imageUrl, id = productoId)
                         fetchedProductos.add(producto)
                     }
                 }
@@ -47,6 +47,19 @@ class ProductosDataSource(private val database: FirebaseDatabase) : IProductosDa
             val ref = database.getReference("productos")
             val newProductRef = ref.push()
             newProductRef.setValue(producto) { error, _ ->
+                if (error == null) {
+                    continuation.resume(Unit)
+                } else {
+                    continuation.resumeWithException(error.toException())
+                }
+            }
+        }
+    }
+
+    suspend fun deleteProduct(productId: String) {
+        suspendCoroutine<Unit> { continuation ->
+            val ref = database.getReference("productos").child(productId)
+            ref.removeValue { error, _ ->
                 if (error == null) {
                     continuation.resume(Unit)
                 } else {

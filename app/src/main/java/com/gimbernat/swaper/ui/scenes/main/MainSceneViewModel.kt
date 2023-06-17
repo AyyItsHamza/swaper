@@ -1,13 +1,5 @@
 package com.gimbernat.swaper.ui.scenes.main
 
-import android.util.Log
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.Button
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -29,8 +21,8 @@ class MainSceneViewModel(
 
     fun fetch(){
         viewModelScope.launch {
-            val capsulesList = productosDataSource.fetch()
-            _productos.value = capsulesList
+            val productlist = productosDataSource.fetch()
+            _productos.value = productlist
             subscribe()
         }
     }
@@ -56,19 +48,26 @@ class MainSceneViewModel(
 
     fun navigateToDetail(producto: Producto){
         viewModelScope.launch {
-            navController.navigate(AppRoutes.CAPSULE_DETAIL.value+"/"+producto.id)
+            navController.navigate(AppRoutes.PRODUCT_DETAIL.value+"/"+producto.id)
         }
     }
 
-    fun addProduct(productName: String, price: String) {
+    fun addProduct(producto: Producto) {
         viewModelScope.launch {
             // Create a new product object with the given name and price
-            val newProduct = Producto(productName, price)
+            val newProduct = Producto(producto.nombre, producto.descripcion)
 
             // Add the new product to the data source
             productosDataSource.addProduct(newProduct)
 
             // Fetch the updated list of products
+            fetch()
+        }
+    }
+
+    fun deleteProduct(id: String) {
+        viewModelScope.launch {
+            productosDataSource.deleteProduct(id)
             fetch()
         }
     }

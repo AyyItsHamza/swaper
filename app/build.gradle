@@ -109,4 +109,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx:21.2.0'
     implementation 'com.google.firebase:firebase-auth-ktx:21.1.0'
     implementation 'com.google.firebase:firebase-database-ktx:20.1.0'
+
+    //FireBaseStorage
+    implementation 'androidx.activity:activity-ktx:1.4.0'
+    implementation 'com.google.firebase:firebase-storage:20.0.0'
 }
