@@ -69,6 +69,18 @@ class ProductosDataSource(private val database: FirebaseDatabase) : IProductosDa
         }
     }
 
+    suspend fun editProduct(productId: String, updatedProduct: Producto) {
+        suspendCoroutine<Unit> { continuation ->
+            val ref = database.getReference("productos").child(productId)
+            ref.setValue(updatedProduct) { error, _ ->
+                if (error == null) {
+                    continuation.resume(Unit)
+                } else {
+                    continuation.resumeWithException(error.toException())
+                }
+            }
+        }
+    }
 
     override suspend fun fetch(): List<Producto> {
         return suspendCoroutine { continuation ->

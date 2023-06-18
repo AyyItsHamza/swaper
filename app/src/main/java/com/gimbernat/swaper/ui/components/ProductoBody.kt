@@ -55,6 +55,21 @@ fun ProductBody(producto: Producto) {
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
+            text = "Nombre Producto",
+            style = MaterialTheme.typography.h5,
+            fontWeight = FontWeight.Bold
+        )
+
+        Text(
+            text = producto.nombre,
+            textAlign = TextAlign.Justify,
+            style = MaterialTheme.typography.body1,
+            fontSize = 18.sp
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
             text = "Description",
             style = MaterialTheme.typography.h5,
             fontWeight = FontWeight.Bold

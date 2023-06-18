@@ -15,6 +15,7 @@ class MainSceneViewModel(
     private val navController: NavController,
     private val sessionDataSource: SessionDataSource,
     private val productosDataSource: ProductosDataSource
+
 ) : ViewModel() {
     private val _productos = MutableLiveData<List<Producto>>()
     val productos: LiveData<List<Producto>> = _productos

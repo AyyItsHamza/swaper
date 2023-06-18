@@ -3,6 +3,7 @@ package com.gimbernat.swaper.ui.scenes.ProductDetails
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import com.albertleal.gibernat.myapplication.datasources.ProductosDataSource
+import com.gimbernat.swaper.datasource.SessionDataSource
 import com.gimbernat.swaper.helpers.ComposableFactory
 
 class ProductDetailSceneFactory (
@@ -13,7 +14,7 @@ class ProductDetailSceneFactory (
     @Composable
     override fun create(id: String?): Any {
         val producto = id?.let { productosDataSource.get(it) }
-        val viewModel = ProductDetailViewModel(navController = navController, product = producto)
+        val viewModel = ProductDetailViewModel(navController, producto, productosDataSource)
         return ProductDetailScene(viewModel)
     }
 }
