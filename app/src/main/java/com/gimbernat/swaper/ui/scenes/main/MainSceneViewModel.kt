@@ -56,7 +56,7 @@ class MainSceneViewModel(
     fun addProduct(producto: Producto) {
         viewModelScope.launch {
             // Create a new product object with the given name and price
-            val newProduct = Producto(producto.nombre, producto.descripcion)
+            val newProduct = Producto(producto.nombre, producto.descripcion, producto.imagenes)
 
             // Add the new product to the data source
             productosDataSource.addProduct(newProduct)

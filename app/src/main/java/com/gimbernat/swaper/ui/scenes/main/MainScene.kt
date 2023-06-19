@@ -1,4 +1,7 @@
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -23,7 +26,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.gimbernat.swaper.models.Producto
-
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import java.io.ByteArrayOutputStream
+import android.Manifest
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -86,7 +100,7 @@ fun MainScene(viewModel: MainSceneViewModel) {
         }
     }
 }
-
+/*
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun AddProductFormDialog(
@@ -149,6 +163,121 @@ fun AddProductFormDialog(
                 }
             }) {
                 Text(text ="Confirmar")
+            }
+        }
+    )
+} */
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+fun AddProductFormDialog(
+    viewModel: MainSceneViewModel,
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit
+) {
+    var name by remember { mutableStateOf("") }
+    var description by remember { mutableStateOf("") }
+    var imageUrl by remember { mutableStateOf("") }
+    var showEmptyNameError by remember { mutableStateOf(false) }
+
+    suspend fun uploadImageToFirebaseStorage(bitmap: Bitmap) {
+        val storage = Firebase.storage
+        val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val filename = "imagen_$timestamp.jpg"
+        val storageRef = storage.reference.child(filename)
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val data = baos.toByteArray()
+
+        val uploadTask = storageRef.putBytes(data)
+        val taskSnapshot = uploadTask.await()
+        val downloadUrl = taskSnapshot.storage.downloadUrl.await()
+        imageUrl = downloadUrl.toString()
+    }
+    val cameraLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
+        if (bitmap != null) {
+            // Sube la imagen a Firebase Storage
+            CoroutineScope(Dispatchers.Main).launch {
+                uploadImageToFirebaseStorage(bitmap)
+            }
+        }
+    }
+
+    val cameraPermissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+        if (isGranted) {
+            // Permiso de la cámara concedido, iniciar la actividad de la cámara
+            cameraLauncher.launch(null)
+        } else {
+            // Permiso de la cámara denegado, mostrar mensaje de error o tomar una acción adecuada
+        }
+    }
+
+    Button(
+        onClick = {
+            // Solicitar permiso de la cámara
+            cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+        }
+    ) {
+        Text(text = "Tomar foto")
+    }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(text = "Añadir Producto") },
+        text = {
+            Column {
+                TextField(
+                    value = name,
+                    onValueChange = { newName ->
+                        name = newName
+                        showEmptyNameError = false
+                    },
+                    label = { Text(text = "Nombre Producto") }
+                )
+                if (showEmptyNameError) {
+                    Text(
+                        text = "Por favor, ingrese un nombre",
+                        color = Color.Red,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+                }
+                TextField(
+                    value = description,
+                    onValueChange = { description = it },
+                    label = { Text(text = "Descripcion del Producto") },
+                    modifier = Modifier.height(100.dp)
+                )
+                Button(
+                    onClick = {
+                        // Solicitar permiso de la cámara
+                        cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+                    },
+                    modifier = Modifier.padding(top = 8.dp)
+                ) {
+                    Text(text = "Tomar foto")
+                }
+            }
+        },
+        dismissButton = {
+            Button(onClick = onDismiss) {
+                Text(text = "Cancelar")
+            }
+        },
+        confirmButton = {
+            Button(onClick = {
+                if (name.isNotEmpty()) {
+                    onConfirm()
+                    viewModel.addProduct(
+                        Producto(
+                            nombre = name,
+                            descripcion = description,
+                            imagenes = imageUrl
+                        )
+                    )
+                } else {
+                    showEmptyNameError = true
+                }
+            }) {
+                Text(text = "Confirmar")
             }
         }
     )
