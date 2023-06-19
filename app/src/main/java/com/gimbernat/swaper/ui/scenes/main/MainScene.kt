@@ -191,7 +191,9 @@ fun AddProductFormDialog(
         val uploadTask = storageRef.putBytes(data)
         val taskSnapshot = uploadTask.await()
         val downloadUrl = taskSnapshot.storage.downloadUrl.await()
-        imageUrl = downloadUrl.toString()
+        if (downloadUrl != null) {
+            imageUrl = downloadUrl.toString()
+        }
     }
     val cameraLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
         if (bitmap != null) {
@@ -206,8 +208,6 @@ fun AddProductFormDialog(
         if (isGranted) {
             // Permiso de la cámara concedido, iniciar la actividad de la cámara
             cameraLauncher.launch(null)
-        } else {
-            // Permiso de la cámara denegado, mostrar mensaje de error o tomar una acción adecuada
         }
     }
 
